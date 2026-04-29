@@ -5,7 +5,6 @@ services:
     image: postgres:15-bookworm
     container_name: supabase-db
     environment:
-      # On met le mot de passe en dur ici pour être sûr que Docker le lise
       POSTGRES_PASSWORD: buyticle
     volumes:
       - supabase_db:/var/lib/postgresql/data
@@ -13,17 +12,18 @@ services:
       - supabase-network
 
   rest:
+    # On utilise une version spécifique stable
     image: postgrest/postgrest:v12.0.2
     container_name: supabase-rest
-    # FORCE L'UTILISATEUR ROOT POUR ÉVITER L'ERREUR ID 1000
-    user: "0:0" 
+    # On enlève la gestion d'utilisateur pour laisser Docker gérer
+    privileged: true 
     depends_on:
       - db
     environment:
-      # Vérifie bien que l'hôte est "db" (le nom du service plus haut)
       PGRST_DB_URI: postgres://postgres:buyticle@db:5432/postgres
       PGRST_DB_SCHEMAS: public
       PGRST_JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
+      PGRST_DB_ANON_ROLE: anon
     networks:
       - supabase-network
 
