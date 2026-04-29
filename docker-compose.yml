@@ -19,20 +19,10 @@ services:
       retries: 10
 
   rest:
-    image: postgrest/postgrest:v12.2.0
+    build:
+      context: .
+      dockerfile: Dockerfile.postgrest
     container_name: supabase-rest
-    entrypoint: >
-      sh -c '
-      CURRENT_UID=$$(id -u) &&
-      CURRENT_GID=$$(id -g) &&
-      if ! grep -q ":$$CURRENT_UID:" /etc/passwd 2>/dev/null; then
-        echo "pgrst:x:$$CURRENT_UID:$$CURRENT_GID:PostgREST:/tmp:/bin/sh" >> /etc/passwd;
-      fi &&
-      if ! grep -q ":$$CURRENT_GID:" /etc/group 2>/dev/null; then
-        echo "pgrst:x:$$CURRENT_GID:" >> /etc/group;
-      fi &&
-      exec /bin/postgrest
-      '
     depends_on:
       db:
         condition: service_healthy
@@ -90,3 +80,4 @@ networks:
 
 volumes:
   supabase_db_final:
+    external: true

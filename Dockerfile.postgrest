@@ -1,0 +1,13 @@
+FROM postgrest/postgrest:v12.2.0 AS pgrst
+FROM alpine:3.19
+COPY --from=pgrst /bin/postgrest /bin/postgrest
+ENTRYPOINT ["/bin/sh", "-c", "\
+  CURRENT_UID=$(id -u) && \
+  CURRENT_GID=$(id -g) && \
+  if ! grep -q \":${CURRENT_UID}:\" /etc/passwd 2>/dev/null; then \
+    echo \"pgrst:x:${CURRENT_UID}:${CURRENT_GID}::/tmp:/bin/sh\" >> /etc/passwd; \
+  fi && \
+  if ! grep -q \":${CURRENT_GID}:\" /etc/group 2>/dev/null; then \
+    echo \"pgrst:x:${CURRENT_GID}:\" >> /etc/group; \
+  fi && \
+  exec /bin/postgrest"]
