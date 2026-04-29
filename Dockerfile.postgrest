@@ -1,6 +1,15 @@
 FROM postgrest/postgrest:v12.2.0 AS pgrst
-FROM alpine:3.19
+
+FROM debian:bookworm-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       libpq5 \
+       ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=pgrst /bin/postgrest /bin/postgrest
+
 ENTRYPOINT ["/bin/sh", "-c", "\
   CURRENT_UID=$(id -u) && \
   CURRENT_GID=$(id -g) && \
