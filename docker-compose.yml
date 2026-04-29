@@ -19,8 +19,7 @@ services:
   rest:
     image: postgrest/postgrest:latest
     container_name: supabase-rest
-    # On force l'utilisateur root ici aussi
-    user: "0:0"
+    # suppression du user: "0:0" qui causait l'erreur
     depends_on:
       db:
         condition: service_healthy
@@ -34,17 +33,41 @@ services:
     networks:
       - supabase-network
 
+  meta:
+    image: supabase/postgres-meta:v0.84.2
+    container_name: supabase-meta
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: db
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: postgres
+      PG_META_DB_USER: postgres
+      PG_META_DB_PASSWORD: buyticle
+    networks:
+      - supabase-network
+
   studio:
     image: supabase/studio:latest
     container_name: supabase-studio
     depends_on:
       - rest
+      - meta
     ports:
       - "3001:3000"
     environment:
+      STUDIO_PG_META_URL: http://meta:8080
       SUPABASE_URL: http://rest:3000
+      SUPABASE_REST_URL: http://rest:3000
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.ReTn6NAsHBnFMRMCeHFR7BPNLVH2JWn7EBl7CXqpKZE
+      SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.FhTDMkNPSEt6Jbfa1T5nN9ZJEf1SHvNxVwqpVYj3INk
       STUDIO_DEFAULT_ORGANIZATION: "Buyticle"
       STUDIO_DEFAULT_PROJECT: "Inventaire"
+      POSTGRES_PASSWORD: buyticle
+      # Désactive les edge functions pour éviter l'erreur EDGE_FUNCTIONS_MANAGEMENT_FOLDER
+      SUPABASE_FUNCTIONS_URL: ""
     networks:
       - supabase-network
 
