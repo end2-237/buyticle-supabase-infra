@@ -11,9 +11,7 @@ services:
     volumes:
       - supabase_db_final:/var/lib/postgresql/data
     networks:
-      supabase-network:
-        aliases:
-          - db
+      - supabase-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -23,6 +21,18 @@ services:
   rest:
     image: postgrest/postgrest:v12.2.0
     container_name: supabase-rest
+    entrypoint: >
+      sh -c '
+      CURRENT_UID=$$(id -u) &&
+      CURRENT_GID=$$(id -g) &&
+      if ! grep -q ":$$CURRENT_UID:" /etc/passwd 2>/dev/null; then
+        echo "pgrst:x:$$CURRENT_UID:$$CURRENT_GID:PostgREST:/tmp:/bin/sh" >> /etc/passwd;
+      fi &&
+      if ! grep -q ":$$CURRENT_GID:" /etc/group 2>/dev/null; then
+        echo "pgrst:x:$$CURRENT_GID:" >> /etc/group;
+      fi &&
+      exec /bin/postgrest
+      '
     depends_on:
       db:
         condition: service_healthy
