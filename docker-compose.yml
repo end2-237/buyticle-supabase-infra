@@ -17,14 +17,16 @@ services:
       retries: 5
 
   rest:
-    image: postgrest/postgrest:latest
+    image: postgrest/postgrest:v12.2.0   # version Debian, pas distroless
     container_name: supabase-rest
-    # suppression du user: "0:0" qui causait l'erreur
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8001:3000"
+    volumes:
+      - /etc/passwd:/etc/passwd:ro       # ← correctif clé
+      - /etc/group:/etc/group:ro
     environment:
       PGRST_DB_URI: postgres://postgres:buyticle@db:5432/postgres
       PGRST_DB_SCHEMAS: public
@@ -66,7 +68,6 @@ services:
       STUDIO_DEFAULT_ORGANIZATION: "Buyticle"
       STUDIO_DEFAULT_PROJECT: "Inventaire"
       POSTGRES_PASSWORD: buyticle
-      # Désactive les edge functions pour éviter l'erreur EDGE_FUNCTIONS_MANAGEMENT_FOLDER
       SUPABASE_FUNCTIONS_URL: ""
     networks:
       - supabase-network
