@@ -1,16 +1,16 @@
 version: '3.8'
 services:
-  supabase-all-in-one:
-    image: supabase/postgres:15.1.1.78
+  supabase:
+    # Cette image est plus légère et plus stable pour les petits VPS
+    image: supabase/postgres:14.1.0
     container_name: supabase-standalone
     environment:
       POSTGRES_PASSWORD: buyticle
       JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
-    # On expose les ports pour être sûr de bypasser les bugs de proxy
     ports:
-      - "5432:5432" # Database directe
-      - "3000:3000" # Studio (Interface)
-      - "8000:8000" # API (PostgREST)
+      - "5432:5432"
+      - "3000:3000"
+      - "8000:8000"
     volumes:
       - supabase_data:/var/lib/postgresql/data
     restart: always
