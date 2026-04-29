@@ -1,18 +1,58 @@
 version: '3.8'
+
 services:
-  supabase:
-    image: supabase/postgres:14.1.0
-    container_name: supabase-standalone
+  db:
+    image: postgres:15-bookworm
+    container_name: supabase-db
     environment:
       POSTGRES_PASSWORD: buyticle
-      JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
-    ports:
-      - "5433:5432" # On passe sur 5433 au cas où
-      - "3001:3000" # ON CHANGE 3000 PAR 3001
-      - "8001:8000" # ON CHANGE 8000 PAR 8001
     volumes:
-      - supabase_data_new:/var/lib/postgresql/data
-    restart: always
+      - supabase_db_new:/var/lib/postgresql/data
+    networks:
+      - supabase-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rest:
+    image: postgrest/postgrest:v12.0.2
+    container_name: supabase-rest
+    # On utilise l'utilisateur root pour éviter l'erreur d'ID
+    user: "0:0"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8001:3000"
+    environment:
+      PGRST_DB_URI: postgres://postgres:buyticle@db:5432/postgres
+      PGRST_DB_SCHEMAS: public
+      PGRST_JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
+      PGRST_DB_ANON_ROLE: postgres
+    networks:
+      - supabase-network
+
+  studio:
+    image: supabase/studio:latest
+    container_name: supabase-studio
+    depends_on:
+      - rest
+    ports:
+      - "3001:3000"
+    environment:
+      SUPABASE_URL: http://rest:3000
+      STUDIO_DEFAULT_ORGANIZATION: "Buyticle"
+      STUDIO_DEFAULT_PROJECT: "Inventaire"
+      # On ajoute ces deux là pour que Studio sache où est l'API
+      SUPABASE_REST_URL: http://rest:3000/rest/v1/
+    networks:
+      - supabase-network
+
+networks:
+  supabase-network:
+    driver: bridge
 
 volumes:
-  supabase_data_new:
+  supabase_db_new:
