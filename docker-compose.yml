@@ -19,6 +19,8 @@ services:
     privileged: true 
     depends_on:
       - db
+    ports:
+    - "8000:3000"
     environment:
       PGRST_DB_URI: postgres://postgres:buyticle@db:5432/postgres
       PGRST_DB_SCHEMAS: public
