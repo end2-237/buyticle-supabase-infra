@@ -10,6 +10,13 @@ RUN apt-get update \
 
 COPY --from=pgrst /bin/postgrest /bin/postgrest
 
+ENV PGRST_DB_URI="postgres://postgres:buyticle@db:5432/postgres?sslmode=disable&connect_timeout=10"
+ENV PGRST_DB_SCHEMAS="public"
+ENV PGRST_DB_ANON_ROLE="postgres"
+ENV PGRST_JWT_SECRET="jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg"
+ENV PGRST_DB_USE_LEGACY_GUCS="true"
+ENV PGRST_SERVER_HOST="0.0.0.0"
+
 ENTRYPOINT ["/bin/sh", "-c", "\
   CURRENT_UID=$(id -u) && \
   CURRENT_GID=$(id -g) && \

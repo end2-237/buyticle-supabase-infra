@@ -26,13 +26,6 @@ services:
         condition: service_healthy
     ports:
       - "8001:3000"
-    environment:
-      PGRST_DB_URI: postgres://postgres:buyticle@cmokfmwje000uos9rfo42levg-db:5432/postgres?sslmode=disable&connect_timeout=10
-      PGRST_DB_SCHEMAS: public
-      PGRST_JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
-      PGRST_DB_ANON_ROLE: postgres
-      PGRST_DB_USE_LEGACY_GUCS: "true"
-      PGRST_SERVER_HOST: "0.0.0.0"
 
   meta:
     image: supabase/postgres-meta:v0.84.2
@@ -42,7 +35,7 @@ services:
         condition: service_healthy
     environment:
       PG_META_PORT: 8080
-      PG_META_DB_HOST: cmokfmwje000uos9rfo42levg-db
+      PG_META_DB_HOST: db
       PG_META_DB_PORT: 5432
       PG_META_DB_NAME: postgres
       PG_META_DB_USER: postgres
@@ -57,9 +50,9 @@ services:
     ports:
       - "3001:3000"
     environment:
-      STUDIO_PG_META_URL: http://cmokfmwje000uos9rfo42levg-meta:8080
-      SUPABASE_URL: http://cmokfmwje000uos9rfo42levg-rest:3000
-      SUPABASE_REST_URL: http://cmokfmwje000uos9rfo42levg-rest:3000
+      STUDIO_PG_META_URL: http://meta:8080
+      SUPABASE_URL: http://rest:3000
+      SUPABASE_REST_URL: http://rest:3000
       SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.ReTn6NAsHBnFMRMCeHFR7BPNLVH2JWn7EBl7CXqpKZE
       SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.FhTDMkNPSEt6Jbfa1T5nN9ZJEf1SHvNxVwqpVYj3INk
       STUDIO_DEFAULT_ORGANIZATION: "Buyticle"
