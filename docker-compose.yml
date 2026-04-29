@@ -17,20 +17,20 @@ services:
       retries: 5
 
   rest:
-    image: postgrest/postgrest:v12.0.2
+    # L'image Bitnami est beaucoup plus tolérante sur les IDs utilisateurs
+    image: bitnami/postgrest:12
     container_name: supabase-rest
-    # On retire le "user: 0:0" qui cause l'erreur
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8001:3000"
     environment:
-      PGRST_DB_URI: postgres://postgres:buyticle@db:5432/postgres
-      PGRST_DB_SCHEMAS: public
-      PGRST_JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
-      # On utilise "postgres" comme rôle par défaut pour la démo 
-      PGRST_DB_ANON_ROLE: postgres 
+      # Attention, les noms de variables changent légèrement chez Bitnami
+      POSTGREST_DB_URI: postgres://postgres:buyticle@db:5432/postgres
+      POSTGREST_DB_SCHEMAS: public
+      POSTGREST_JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
+      POSTGREST_DB_ANON_ROLE: postgres
     networks:
       - supabase-network
   studio:
