@@ -10,8 +10,6 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - supabase_db_final:/var/lib/postgresql/data
-    networks:
-      - supabase-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -29,15 +27,12 @@ services:
     ports:
       - "8001:3000"
     environment:
-      PGRST_DB_URI: postgres://postgres:buyticle@db:5432/postgres?sslmode=disable&connect_timeout=10
+      DB_PASS: buyticle
       PGRST_DB_SCHEMAS: public
       PGRST_JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
       PGRST_DB_ANON_ROLE: postgres
       PGRST_DB_USE_LEGACY_GUCS: "true"
-      PGHOST: db
-      PGPORT: "5432"
-    networks:
-      - supabase-network
+      PGRST_SERVER_HOST: "0.0.0.0"
 
   meta:
     image: supabase/postgres-meta:v0.84.2
@@ -52,8 +47,6 @@ services:
       PG_META_DB_NAME: postgres
       PG_META_DB_USER: postgres
       PG_META_DB_PASSWORD: buyticle
-    networks:
-      - supabase-network
 
   studio:
     image: supabase/studio:latest
@@ -73,12 +66,6 @@ services:
       STUDIO_DEFAULT_PROJECT: "Inventaire"
       POSTGRES_PASSWORD: buyticle
       SUPABASE_FUNCTIONS_URL: ""
-    networks:
-      - supabase-network
-
-networks:
-  supabase-network:
-    driver: bridge
 
 volumes:
   supabase_db_final:
