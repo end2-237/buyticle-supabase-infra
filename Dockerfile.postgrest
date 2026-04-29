@@ -16,7 +16,4 @@ ENTRYPOINT ["/bin/sh", "-c", "\
   if ! grep -q \":${CURRENT_UID}:\" /etc/passwd 2>/dev/null; then \
     echo \"pgrst:x:${CURRENT_UID}:${CURRENT_GID}::/tmp:/bin/sh\" >> /etc/passwd; \
   fi && \
-  if ! grep -q \":${CURRENT_GID}:\" /etc/group 2>/dev/null; then \
-    echo \"pgrst:x:${CURRENT_GID}:\" >> /etc/group; \
-  fi && \
   exec /bin/postgrest"]
