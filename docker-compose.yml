@@ -34,7 +34,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      PG_META_PORT: 8080
+      PG_META_PORT: 8000
       PG_META_DB_HOST: db
       PG_META_DB_PORT: 5432
       PG_META_DB_NAME: postgres
@@ -50,7 +50,7 @@ services:
     ports:
       - "3001:3000"
     environment:
-      STUDIO_PG_META_URL: http://meta:8080
+      STUDIO_PG_META_URL: http://meta:8000
       SUPABASE_URL: http://rest:3000
       SUPABASE_REST_URL: http://rest:3000
       SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.ReTn6NAsHBnFMRMCeHFR7BPNLVH2JWn7EBl7CXqpKZE
