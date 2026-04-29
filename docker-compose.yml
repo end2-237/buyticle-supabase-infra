@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_PASSWORD: buyticle
     volumes:
-      - supabase_db_new:/var/lib/postgresql/data
+      - supabase_db_final:/var/lib/postgresql/data
     networks:
       - supabase-network
     healthcheck:
@@ -17,15 +17,15 @@ services:
       retries: 5
 
   rest:
-    image: postgrest/postgrest:v12.0.2
+    image: postgrest/postgrest:latest
     container_name: supabase-rest
+    # On force l'utilisateur root ici aussi
+    user: "0:0"
     depends_on:
       db:
         condition: service_healthy
     ports:
       - "8001:3000"
-    # CETTE LIGNE EST LA CLÉ : on lance le binaire directement
-    entrypoint: ["postgrest"]
     environment:
       PGRST_DB_URI: postgres://postgres:buyticle@db:5432/postgres
       PGRST_DB_SCHEMAS: public
@@ -33,6 +33,7 @@ services:
       PGRST_DB_ANON_ROLE: postgres
     networks:
       - supabase-network
+
   studio:
     image: supabase/studio:latest
     container_name: supabase-studio
@@ -44,8 +45,6 @@ services:
       SUPABASE_URL: http://rest:3000
       STUDIO_DEFAULT_ORGANIZATION: "Buyticle"
       STUDIO_DEFAULT_PROJECT: "Inventaire"
-      # On ajoute ces deux là pour que Studio sache où est l'API
-      SUPABASE_REST_URL: http://rest:3000/rest/v1/
     networks:
       - supabase-network
 
@@ -54,4 +53,4 @@ networks:
     driver: bridge
 
 volumes:
-  supabase_db_new:
+  supabase_db_final:
