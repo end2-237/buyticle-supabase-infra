@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-bookworm
+    container_name: supabase-db
+    environment:
+      POSTGRES_PASSWORD: buyticle
+    volumes:
+      - supabase_db:/var/lib/postgresql/data
+    networks:
+      - supabase-network
+
+  rest:
+    image: postgrest/postgrest:v12.0.2
+    container_name: supabase-rest
+    depends_on:
+      - db
+    environment:
+      PGRST_DB_URI: postgres://postgres:buyticle@db:5432/postgres
+      PGRST_DB_SCHEMAS: public
+      PGRST_JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
+    networks:
+      - supabase-network
+
+  studio:
+    image: supabase/studio:latest
+    container_name: supabase-studio
+    depends_on:
+      - rest
+    environment:
+      SUPABASE_URL: http://rest:3000
+      STUDIO_DEFAULT_ORGANIZATION: "Buyticle"
+      STUDIO_DEFAULT_PROJECT: "Inventaire"
+    networks:
+      - supabase-network
+
+networks:
+  supabase-network:
+    external: false
+
+volumes:
+  supabase_db:
