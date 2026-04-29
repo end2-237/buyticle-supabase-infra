@@ -28,18 +28,13 @@ services:
       - "8001:3000"
 
   meta:
-    image: supabase/postgres-meta:v0.84.2
+    build:
+      context: .
+      dockerfile: Dockerfile.meta
     container_name: supabase-meta
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      PG_META_PORT: 8000
-      PG_META_DB_HOST: db
-      PG_META_DB_PORT: 5432
-      PG_META_DB_NAME: postgres
-      PG_META_DB_USER: postgres
-      PG_META_DB_PASSWORD: buyticle
 
   studio:
     build:
