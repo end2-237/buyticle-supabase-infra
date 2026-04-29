@@ -42,23 +42,15 @@ services:
       PG_META_DB_PASSWORD: buyticle
 
   studio:
-    image: supabase/studio:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.studio
     container_name: supabase-studio
     depends_on:
       - rest
       - meta
     ports:
       - "3001:3000"
-    environment:
-      STUDIO_PG_META_URL: http://meta:8000
-      SUPABASE_URL: http://rest:3000
-      SUPABASE_REST_URL: http://rest:3000
-      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.ReTn6NAsHBnFMRMCeHFR7BPNLVH2JWn7EBl7CXqpKZE
-      SUPABASE_SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.FhTDMkNPSEt6Jbfa1T5nN9ZJEf1SHvNxVwqpVYj3INk
-      STUDIO_DEFAULT_ORGANIZATION: "Buyticle"
-      STUDIO_DEFAULT_PROJECT: "Inventaire"
-      POSTGRES_PASSWORD: buyticle
-      SUPABASE_FUNCTIONS_URL: ""
 
 volumes:
   supabase_db_final:
