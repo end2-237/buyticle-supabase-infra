@@ -1,19 +1,18 @@
 version: '3.8'
 services:
   supabase:
-    # Cette image est plus légère et plus stable pour les petits VPS
     image: supabase/postgres:14.1.0
     container_name: supabase-standalone
     environment:
       POSTGRES_PASSWORD: buyticle
       JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
     ports:
-      - "5432:5432"
-      - "3000:3000"
-      - "8000:8000"
+      - "5433:5432" # On passe sur 5433 au cas où
+      - "3001:3000" # ON CHANGE 3000 PAR 3001
+      - "8001:8000" # ON CHANGE 8000 PAR 8001
     volumes:
-      - supabase_data:/var/lib/postgresql/data
+      - supabase_data_new:/var/lib/postgresql/data
     restart: always
 
 volumes:
-  supabase_data:
+  supabase_data_new:
