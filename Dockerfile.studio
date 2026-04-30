@@ -3,7 +3,7 @@ FROM supabase/studio:latest
 ENV STUDIO_PG_META_URL=http://meta:8080
 ENV SUPABASE_URL=https://rest.vps.buyticle.com
 ENV SUPABASE_REST_URL=https://rest.vps.buyticle.com
-ENV STORAGE_URL=http://storage-proxy:80
+ENV STORAGE_URL=http://storageproxy:80
 ENV NEXT_PUBLIC_STORAGE_URL=https://storage.vps.buyticle.com
 ENV SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.Zh6_Tis6i9tJ0pUUhjEgS8Z6JoCxxxIoNSYztm0Zsec
 ENV SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.1olGuGrVqAzTirqYD_fG65VOcu7sUUYaK2Mmx7YU1yA
