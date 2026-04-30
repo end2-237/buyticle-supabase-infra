@@ -10,6 +10,7 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - supabase_db_final:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -36,6 +37,41 @@ services:
       db:
         condition: service_healthy
 
+  storage:
+    image: supabase/storage-api:v1.11.13
+    container_name: supabase-storage
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.ReTn6NAsHBnFMRMCeHFR7BPNLVH2JWn7EBl7CXqpKZE
+      SERVICE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.FhTDMkNPSEt6Jbfa1T5nN9ZJEf1SHvNxVwqpVYj3INk
+      POSTGREST_URL: http://rest:3000
+      PGRST_JWT_SECRET: jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
+      DATABASE_URL: postgresql://supabase_admin:buyticle@db:5432/postgres
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      REGION: stub
+      GLOBAL_S3_BUCKET: stub
+      ENABLE_IMAGE_TRANSFORMATION: "true"
+      IMGPROXY_URL: http://imgproxy:8080
+    volumes:
+      - supabase_storage:/var/lib/storage
+
+  imgproxy:
+    image: darthsim/imgproxy:v3.8.0
+    container_name: supabase-imgproxy
+    environment:
+      IMGPROXY_BIND: :8080
+      IMGPROXY_LOCAL_FILESYSTEM_ROOT: /
+      IMGPROXY_USE_ETAG: "true"
+    volumes:
+      - supabase_storage:/var/lib/storage:ro
+
   studio:
     build:
       context: .
@@ -44,9 +80,12 @@ services:
     depends_on:
       - rest
       - meta
+      - storage
     ports:
       - "3001:3000"
 
 volumes:
   supabase_db_final:
     external: true
+  supabase_storage:
+    driver: local
