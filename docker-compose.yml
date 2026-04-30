@@ -77,7 +77,7 @@ volumes:
   supabase_storage:
     external: true
     name: cmokfmwje000uos9rfo42levgsupabase_storage
-storage-proxy:
+storageproxy:
     image: nginx:alpine
     container_name: supabase-storage-proxy
     volumes:
