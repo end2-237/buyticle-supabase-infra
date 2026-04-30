@@ -1,25 +1,10 @@
-FROM node:20-bookworm-slim AS proxy
-
-RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
-
 FROM supabase/storage-api:v1.11.13
-
-COPY --from=proxy /usr/sbin/nginx /usr/sbin/nginx
-COPY --from=proxy /etc/nginx /etc/nginx
-COPY --from=proxy /usr/lib/nginx /usr/lib/nginx
-COPY --from=proxy /var/lib/nginx /var/lib/nginx
-COPY --from=proxy /var/log/nginx /var/log/nginx
-COPY --from=proxy /run /run
-
-RUN mkdir -p /var/log/nginx /run/nginx
-
-COPY nginx-storage.conf /etc/nginx/sites-enabled/default
 
 ENV ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.Zh6_Tis6i9tJ0pUUhjEgS8Z6JoCxxxIoNSYztm0Zsec
 ENV SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.1olGuGrVqAzTirqYD_fG65VOcu7sUUYaK2Mmx7YU1yA
 ENV POSTGREST_URL=http://rest:3000
 ENV PGRST_JWT_SECRET=jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
-ENV DATABASE_URL=postgresql://supabase_admin:buyticle@db:5432/postgres?search_path=storage
+ENV DATABASE_URL=postgresql://supabase_admin:buyticle@db:5432/postgres
 ENV FILE_SIZE_LIMIT=52428800
 ENV STORAGE_BACKEND=file
 ENV FILE_STORAGE_BACKEND_PATH=/var/lib/storage
@@ -29,5 +14,3 @@ ENV GLOBAL_S3_BUCKET=stub
 ENV ENABLE_IMAGE_TRANSFORMATION=true
 ENV IMGPROXY_URL=http://imgproxy:8080
 ENV SERVER_PORT=5000
-
-ENTRYPOINT ["/bin/sh", "-c", "nginx && exec node /app/dist/start/index.js"]
