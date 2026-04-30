@@ -73,5 +73,7 @@ services:
 volumes:
   supabase_db_final:
     external: true
+    name: cmokfmwje000uos9rfo42levgsupabase_db_final
   supabase_storage:
-    driver: local
+    external: true
+    name: cmokfmwje000uos9rfo42levgsupabase_storage
