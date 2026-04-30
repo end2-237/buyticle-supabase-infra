@@ -5,6 +5,7 @@ ENV SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2x
 ENV POSTGREST_URL=http://rest:3000
 ENV PGRST_JWT_SECRET=jksdfhksdfldjflhslfhljskhflsjhgsdjfhgskjg
 ENV DATABASE_URL=postgresql://supabase_admin:buyticle@db:5432/postgres
+ENV DB_SEARCH_PATH=storage
 ENV FILE_SIZE_LIMIT=52428800
 ENV STORAGE_BACKEND=file
 ENV FILE_STORAGE_BACKEND_PATH=/var/lib/storage
