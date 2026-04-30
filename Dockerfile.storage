@@ -1,6 +1,17 @@
-FROM supabase/storage-api:v1.11.13
+FROM node:20-bookworm-slim AS proxy
 
 RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+
+FROM supabase/storage-api:v1.11.13
+
+COPY --from=proxy /usr/sbin/nginx /usr/sbin/nginx
+COPY --from=proxy /etc/nginx /etc/nginx
+COPY --from=proxy /usr/lib/nginx /usr/lib/nginx
+COPY --from=proxy /var/lib/nginx /var/lib/nginx
+COPY --from=proxy /var/log/nginx /var/log/nginx
+COPY --from=proxy /run /run
+
+RUN mkdir -p /var/log/nginx /run/nginx
 
 COPY nginx-storage.conf /etc/nginx/sites-enabled/default
 
