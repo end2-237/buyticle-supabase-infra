@@ -2,12 +2,10 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15-bookworm
+    build:
+      context: .
+      dockerfile: Dockerfile.db
     container_name: supabase-db
-    environment:
-      POSTGRES_PASSWORD: buyticle
-      POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
     volumes:
       - supabase_db_final:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -49,6 +47,7 @@ services:
       - "5000:5000"
     volumes:
       - supabase_storage:/var/lib/storage
+
   imgproxy:
     image: darthsim/imgproxy:v3.8.0
     container_name: supabase-imgproxy

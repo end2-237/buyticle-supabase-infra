@@ -1,0 +1,5 @@
+FROM postgres:15-bookworm
+
+ENV POSTGRES_PASSWORD=buyticle
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_DB=postgres
