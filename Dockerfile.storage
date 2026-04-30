@@ -1,5 +1,9 @@
 FROM supabase/storage-api:v1.11.13
 
+RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+
+COPY nginx-storage.conf /etc/nginx/sites-enabled/default
+
 ENV ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.Zh6_Tis6i9tJ0pUUhjEgS8Z6JoCxxxIoNSYztm0Zsec
 ENV SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.1olGuGrVqAzTirqYD_fG65VOcu7sUUYaK2Mmx7YU1yA
 ENV POSTGREST_URL=http://rest:3000
@@ -14,5 +18,5 @@ ENV GLOBAL_S3_BUCKET=stub
 ENV ENABLE_IMAGE_TRANSFORMATION=true
 ENV IMGPROXY_URL=http://imgproxy:8080
 ENV SERVER_PORT=5000
-ENV SERVER_REGION=local
-ENV STORAGE_URL=http://storage:5000
+
+ENTRYPOINT ["/bin/sh", "-c", "nginx && exec node /app/dist/start/index.js"]
