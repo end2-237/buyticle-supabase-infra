@@ -17,4 +17,4 @@ ENV SERVER_PORT=5000
 
 COPY proxy.js /proxy.js
 
-ENTRYPOINT ["/bin/sh", "-c", "node /proxy.js & exec docker-entrypoint.sh node /app/dist/start/index.js"]
+CMD node /proxy.js & node /app/dist/start/index.js
