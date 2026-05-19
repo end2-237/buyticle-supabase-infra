@@ -14,3 +14,7 @@ ENV STUDIO_DEFAULT_PROJECT=Inventaire
 ENV POSTGRES_PASSWORD=buyticle
 ENV SUPABASE_FUNCTIONS_URL=""
 ENV IS_PLATFORM=false
+ENV PORT=3001
+
+COPY studio-proxy.js /studio-proxy.js
+CMD ["sh", "-c", "node /app/apps/studio/server.js & exec node /studio-proxy.js"]
