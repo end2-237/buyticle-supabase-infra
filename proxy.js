@@ -1,7 +1,7 @@
 const http = require('http');
 
-const PORT = 5001;
-const STORAGE_PORT = 5000;
+const PORT = 5000;
+const STORAGE_PORT = 5002;
 
 http.createServer((req, res) => {
   let path = req.url;
