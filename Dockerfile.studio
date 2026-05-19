@@ -1,7 +1,7 @@
 FROM supabase/studio:latest
 
 ENV STUDIO_PG_META_URL=http://meta:8080
-ENV SUPABASE_URL=https://rest.vps.buyticle.com
+ENV SUPABASE_URL=http://storage:5003
 ENV SUPABASE_REST_URL=https://rest.vps.buyticle.com
 ENV STORAGE_URL=http://storage:5000
 ENV NEXT_PUBLIC_STORAGE_URL=https://storage.vps.buyticle.com
