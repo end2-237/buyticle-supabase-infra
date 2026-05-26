@@ -27,7 +27,7 @@ http.createServer((req, res) => {
     port: STUDIO_PORT,
     path: req.url,
     method: req.method,
-    headers: req.headers
+    headers: Object.assign({}, req.headers, { 'accept-encoding': 'identity' })eaders: Object.assign({}, req.headers, { 'accept-encoding': 'identity' })
   };
 
   const pr = http.request(opts, (ps) => {
