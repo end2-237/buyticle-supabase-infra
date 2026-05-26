@@ -12,6 +12,7 @@ RUN sed -i \
       -e 's|STUDIO_PG_META_URL=.*|STUDIO_PG_META_URL=http://meta:8080|g' \
       -e 's|SUPABASE_ANON_KEY=.*|SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.Zh6_Tis6i9tJ0pUUhjEgS8Z6JoCxxxIoNSYztm0Zsec|g' \
       -e 's|SUPABASE_SERVICE_KEY=.*|SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.1olGuGrVqAzTirqYD_fG65VOcu7sUUYaK2Mmx7YU1yA|g' \
+      -e 's|STORAGE_URL=.*|STORAGE_URL=http://storage:5000|g' \
       /app/apps/studio/.env 2>/dev/null || true
 
 ENV STUDIO_PG_META_URL=http://meta:8080
