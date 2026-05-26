@@ -16,10 +16,15 @@ function forward(req, res, hostname, port, path) {
 // External storage proxy on port 5000 (Coolify routes storage.vps.buyticle.com here)
 http.createServer((req, res) => {
   let path = req.url;
+  let hostname = 'localhost', port = STORAGE_PORT;
   if (path.startsWith('/storage/v1')) {
     path = path.replace('/storage/v1', '') || '/';
+  } else if (path.startsWith('/rest/v1')) {
+    path = path.replace('/rest/v1', '') || '/';
+    hostname = 'rest';
+    port = 3000;
   }
-  forward(req, res, 'localhost', STORAGE_PORT, path);
+  forward(req, res, hostname, port, path);
 }).listen(PORT, () => console.log(`Storage proxy on port ${PORT}`));
 
 // Internal API gateway on port 5003 (for Studio supabase-js client)

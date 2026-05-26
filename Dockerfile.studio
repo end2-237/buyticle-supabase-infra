@@ -1,10 +1,9 @@
 FROM supabase/studio:latest
 
 ENV STUDIO_PG_META_URL=http://meta:8080
-ENV SUPABASE_URL=http://storage:5003
+ENV SUPABASE_URL=https://storage.vps.buyticle.com
 ENV SUPABASE_REST_URL=https://rest.vps.buyticle.com
 ENV STORAGE_URL=http://storage:5000
-ENV EDGE_FUNCTIONS_MANAGEMENT_FOLDER=/tmp/functions
 ENV NEXT_PUBLIC_STORAGE_URL=https://storage.vps.buyticle.com
 ENV NEXT_PUBLIC_STORAGE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIiwiaWF0IjoxNjEzNTMxOTg1LCJleHAiOjE5MjkxMDc5ODV9.1olGuGrVqAzTirqYD_fG65VOcu7sUUYaK2Mmx7YU1yA
 ENV SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxMzUzMTk4NSwiZXhwIjoxOTI5MTA3OTg1fQ.Zh6_Tis6i9tJ0pUUhjEgS8Z6JoCxxxIoNSYztm0Zsec
@@ -14,8 +13,6 @@ ENV STUDIO_DEFAULT_ORGANIZATION=Buyticle
 ENV STUDIO_DEFAULT_PROJECT=Inventaire
 ENV POSTGRES_PASSWORD=buyticle
 ENV SUPABASE_FUNCTIONS_URL=""
+ENV EDGE_FUNCTIONS_MANAGEMENT_FOLDER=/tmp/functions
 ENV IS_PLATFORM=false
-ENV PORT=3001
-
-COPY studio-proxy.js /studio-proxy.js
-CMD ["sh", "-c", "node /app/apps/studio/server.js & node -e \"var net=require('net');function w(){var c=net.createConnection(3001,'127.0.0.1');c.once('connect',function(){c.destroy();process.exit(0)});c.once('error',function(){c.destroy();setTimeout(w,500)})}w()\" && exec node /studio-proxy.js"]
+ENV PORT=3000
