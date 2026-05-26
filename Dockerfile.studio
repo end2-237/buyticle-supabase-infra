@@ -1,10 +1,15 @@
 FROM supabase/studio:latest
 
-# Replace hardcoded Kong gateway URL (localhost:8000) baked into the compiled JS
+# Replace hardcoded Kong gateway URL in compiled JS and .env file
 RUN find /app -name "*.js" -type f | xargs grep -l "localhost:8000" 2>/dev/null | \
     xargs -r sed -i \
       -e 's|http://localhost:8000|https://storage.vps.buyticle.com|g' \
       -e 's|"localhost:8000"|"storage.vps.buyticle.com"|g' || true
+
+RUN sed -i \
+      -e 's|SUPABASE_URL=http://localhost:8000|SUPABASE_URL=https://storage.vps.buyticle.com|g' \
+      -e 's|SUPABASE_PUBLIC_URL=http://localhost:8000|SUPABASE_PUBLIC_URL=https://storage.vps.buyticle.com|g' \
+      /app/apps/studio/.env 2>/dev/null || true
 
 ENV STUDIO_PG_META_URL=http://meta:8080
 ENV SUPABASE_URL=https://storage.vps.buyticle.com
