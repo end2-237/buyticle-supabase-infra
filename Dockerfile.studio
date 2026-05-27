@@ -1,5 +1,7 @@
 FROM supabase/studio:latest
 
+HEALTHCHECK NONE
+
 # 1. Remplacer localhost:8000 hardcodé dans les bundles JS compilés
 RUN find /app -name "*.js" -type f | xargs grep -l "localhost:8000" 2>/dev/null | \
     xargs -r sed -i \
