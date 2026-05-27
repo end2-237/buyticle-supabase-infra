@@ -33,4 +33,8 @@ ENV POSTGRES_PASSWORD=buyticle
 ENV SUPABASE_FUNCTIONS_URL=""
 ENV EDGE_FUNCTIONS_MANAGEMENT_FOLDER=/tmp/functions
 ENV IS_PLATFORM=false
-ENV PORT=3000
+ENV PORT=3001
+
+COPY studio-proxy.js /studio-proxy.js
+
+CMD ["sh", "-c", "node /app/apps/studio/server.js & node -e \"var net=require('net');function w(){var c=net.createConnection(3001,'127.0.0.1');c.once('connect',function(){c.destroy();process.exit(0)});c.once('error',function(){c.destroy();setTimeout(w,500)})}w()\" && exec node /studio-proxy.js"]
