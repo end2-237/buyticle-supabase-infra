@@ -1,11 +1,12 @@
 FROM supabase/studio:latest
 
-# Replace hardcoded Kong gateway URL in compiled JS and .env file
+# 1. Remplacer localhost:8000 hardcodé dans les bundles JS compilés
 RUN find /app -name "*.js" -type f | xargs grep -l "localhost:8000" 2>/dev/null | \
     xargs -r sed -i \
       -e 's|http://localhost:8000|https://storage.vps.buyticle.com|g' \
       -e 's|"localhost:8000"|"storage.vps.buyticle.com"|g' || true
 
+# 2. Patcher le .env interne (prioritaire sur les ENV Docker dans Next.js)
 RUN sed -i \
       -e 's|SUPABASE_URL=http://localhost:8000|SUPABASE_URL=https://storage.vps.buyticle.com|g' \
       -e 's|SUPABASE_PUBLIC_URL=http://localhost:8000|SUPABASE_PUBLIC_URL=https://storage.vps.buyticle.com|g' \
