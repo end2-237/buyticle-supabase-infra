@@ -24,7 +24,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8001:3000"
+      - "8011:3000"
 
   meta:
     build:
@@ -44,7 +44,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "5000:5000"
+      - "5010:5000"
     volumes:
       - supabase_storage:/var/lib/storage
 
@@ -68,12 +68,8 @@ services:
       - meta
       - storage
     ports:
-      - "3001:3000"
+      - "3011:3000"
 
 volumes:
   supabase_db_final:
-    external: true
-    name: cmokfmwje000uos9rfo42levgsupabase_db_final
   supabase_storage:
-    external: true
-    name: cmokfmwje000uos9rfo42levgsupabase_storage
