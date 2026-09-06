@@ -3,7 +3,7 @@ const http = require('http');
 const STUDIO_PORT = 3001;
 const PROXY_PORT  = 3000;
 const FROM = 'http://localhost:8000';
-const TO   = 'https://storage-staging.vps.buyticle.com';
+const TO   = 'https://storage.vps.buyticle.com';
 
 // Injected into every HTML page before </head>
 const INJECT = `<script>(function(){
