@@ -31,6 +31,10 @@ GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA :"schema" TO :"role";
 ALTER DEFAULT PRIVILEGES IN SCHEMA :"schema" GRANT ALL ON TABLES TO :"role";
 ALTER DEFAULT PRIVILEGES IN SCHEMA :"schema" GRANT ALL ON SEQUENCES TO :"role";
 GRANT USAGE ON SCHEMA public TO :"role";
+-- Les outils de migration (Drizzle, Prisma…) lancent « CREATE SCHEMA IF NOT
+-- EXISTS » à chaque démarrage : Postgres exige le droit CREATE sur la base,
+-- même quand le schéma existe. Sans lui, l'application ne migre jamais.
+SELECT format('GRANT CREATE ON DATABASE %I TO %I', current_database(), :'role') \gexec
 -- Tables protégées par RLS : sans règle, le compte de l'application y voit 0 ligne
 -- (sans erreur). On lui donne l'accès à SON schéma uniquement.
 SELECT format('DROP POLICY IF EXISTS %I ON %I.%I; CREATE POLICY %I ON %I.%I FOR ALL TO %I USING (true) WITH CHECK (true)',
